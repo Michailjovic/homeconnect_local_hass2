@@ -109,7 +109,8 @@ class HCProgram(HCSelect):
     @error_decorator
     async def async_select_option(self, option: str) -> None:
         selected_program = self._runtime_data.appliance.programs[self._rev_programs[option]]
-        if selected_program.execution in (Execution.SELECT_ONLY, Execution.SELECT_AND_START):
-            await selected_program.select()
-        elif selected_program.execution == Execution.START_ONLY:
+        if selected_program.execution == Execution.START_ONLY:
             await selected_program.start()
+        else:
+            # SELECT_ONLY, SELECT_AND_START i neznámý mode (Favorite programy)
+            await selected_program.select()
