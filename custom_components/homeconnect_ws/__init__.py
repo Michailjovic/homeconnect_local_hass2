@@ -18,6 +18,24 @@ from homeassistant.helpers.device_registry import (
 from homeassistant.util.hass_dict import HassKey
 from homeconnect_websocket import CodeResponsError, Entity
 
+# Monkey-patch: WNC254A0BY posílá 'SELECTANDSTART' místo 'selectandstart'
+# Knihovna homeconnect_websocket očekává lowercase hodnoty v Execution enum
+import homeconnect_websocket.entities as _hc_entities
+
+_original_program_update = (
+    _hc_entities.SelectedProgram.update.__wrapped__
+    if hasattr(_hc_entities.SelectedProgram.update, "__wrapped__")
+    else _hc_entities.SelectedProgram.update
+)
+
+async def _patched_program_update(self, entity):
+    if isinstance(entity, dict) and "execution" in entity:
+        entity = dict(entity)
+        entity["execution"] = entity["execution"].lower()
+    await _original_program_update(self, entity)
+
+_hc_entities.SelectedProgram.update = _patched_program_update
+
 from .const import (
     CONF_DEV_OVERRIDE_HOST,
     CONF_DEV_OVERRIDE_PSK,
