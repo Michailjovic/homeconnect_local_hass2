@@ -285,15 +285,20 @@ COMMON_ENTITY_DESCRIPTIONS: _EntityDescriptionsDefinitionsType = {
         HCSensorEntityDescription(
             key="sensor_remaining_program_time",
             entity="BSH.Common.Option.RemainingProgramTime",
-            device_class=SensorDeviceClass.DURATION,
-            native_unit_of_measurement=UnitOfTime.SECONDS,
-            suggested_unit_of_measurement=UnitOfTime.HOURS,
+            device_class=SensorDeviceClass.TIMESTAMP,
             extra_attributes=[
                 {
                     "name": "Is Estimated",
                     "entity": "BSH.Common.Option.RemainingProgramTimeIsEstimated",
                 }
             ],
+        ),
+        HCSensorEntityDescription(
+            key="sensor_elapsed_program_time",
+            entity="BSH.Common.Option.ElapsedProgramTime",
+            device_class=SensorDeviceClass.DURATION,
+            native_unit_of_measurement=UnitOfTime.SECONDS,
+            suggested_unit_of_measurement=UnitOfTime.HOURS,
         ),
         HCSensorEntityDescription(
             key="sensor_program_progress",
